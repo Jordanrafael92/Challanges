@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jordansilva.crud.dto.ClientDTO;
 import com.jordansilva.crud.entities.Client;
 import com.jordansilva.crud.repositories.ClientRepository;
+import com.jordansilva.crud.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientService {
@@ -27,7 +28,7 @@ public class ClientService {
 	@Transactional(readOnly = true)
 	public ClientDTO findById(Long id) {
 		Optional<Client> obj = repository.findById(id);
-		Client entity = obj.get();
+		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found, ID: " + id));
 		return new ClientDTO(entity);
 	}
 }
